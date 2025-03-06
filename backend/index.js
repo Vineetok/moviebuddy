@@ -4,6 +4,9 @@ import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import path from "path";
 
+
+
+
 // Files
 import connectDB from "./config/db.js";
 import userRoutes from "./routes/userRoutes.js";
@@ -31,6 +34,10 @@ app.use("/api/v1/movies", moviesRoutes);
 app.use("/api/v1/upload", uploadRoutes);
 
 const __dirname = path.resolve();
+app.use(express.static(path.join(__dirname, "/frontend/dist")));
 app.use("/uploads", express.static(path.join(__dirname + "/uploads")));
 
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
+  });
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));

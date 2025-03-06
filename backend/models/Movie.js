@@ -26,6 +26,7 @@ const movieSchema = new mongoose.Schema(
     reviews: [reviewSchema],
     numReviews: { type: Number, required: true, default: 0 },
     createdAt: { type: Date, default: Date.now },
+    streamingLink: { type: String },
   },
   { timestamps: true }
 );

@@ -3,18 +3,22 @@ import App from "./App.jsx";
 import "./index.css";
 import store from "./redux/store.js";
 import { Provider } from "react-redux";
-import { Route, RouterProvider, createRoutesFromElements } from "react-router";
-import { createBrowserRouter } from "react-router-dom";
+import { Route, createRoutesFromElements } from "react-router";
+
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+
+// Error & NotFound Pages
+import ErrorPage from "./pages/ErrorPage.jsx"; // Ensure this exists
+import NotFoundPage from "./pages/NotFoundPage.jsx"; // Ensure this exists
 
 // Auth
 import AdminRoute from "./pages/Admin/AdminRoute.jsx";
 import GenreList from "./pages/Admin/GenreList.jsx";
-
-// Restricted
 import Login from "./pages/Auth/Login.jsx";
 import Register from "./pages/Auth/Register.jsx";
 import PrivateRoute from "./pages/Auth/PrivateRoute.jsx";
 
+// General Pages
 import Home from "./pages/Home.jsx";
 import Profile from "./pages/User/Profile.jsx";
 import AdminMoviesList from "./pages/Admin/AdminMoviesList.jsx";
@@ -27,18 +31,21 @@ import AdminDashboard from "./pages/Admin/Dashboard/AdminDashboard.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<App />}>
-      <Route index={true} path="/" element={<Home />} />
+    <Route path="/" element={<App />} errorElement={<ErrorPage />}>
+      <Route index element={<Home />} />
       <Route path="/movies" element={<AllMovies />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/movies/:id" element={<MovieDetails />} />
 
-      <Route path="" element={<PrivateRoute />}>
+
+      {/* Protected Routes */}
+      <Route element={<PrivateRoute />}>
         <Route path="/profile" element={<Profile />} />
       </Route>
 
-      <Route path="" element={<AdminRoute />}>
+      {/* Admin Routes */}
+      <Route element={<AdminRoute />}>
         <Route path="/admin/movies/genre" element={<GenreList />} />
         <Route path="/admin/movies/create" element={<CreateMovie />} />
         <Route path="/admin/movies-list" element={<AdminMoviesList />} />
@@ -46,6 +53,9 @@ const router = createBrowserRouter(
         <Route path="/admin/movies/dashboard" element={<AdminDashboard />} />
         <Route path="/admin/movies/comments" element={<AllComments />} />
       </Route>
+
+      {/* Catch-all 404 Route */}
+      <Route path="*" element={<NotFoundPage />} />
     </Route>
   )
 );

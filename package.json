@@ -1,7 +1,7 @@
 {
   "name": "my-movies",
   "version": "1.0.0",
-  "description": "",
+  "description": "��#\u0000 \u0000M\u0000E\u0000R\u0000N\u0000 \u0000S\u0000t\u0000a\u0000c\u0000k\u0000 \u0000M\u0000o\u0000v\u0000i\u0000e\u0000s\u0000 \u0000A\u0000p\u0000p\u0000 \u0000=�G�\r\u0000 \u0000\r\u0000 \u0000#\u0000 \u0000[\u0000W\u0000a\u0000t\u0000c\u0000h\u0000 \u0000M\u0000e\u0000 \u0000B\u0000u\u0000i\u0000l\u0000d\u0000 \u0000T\u0000h\u0000i\u0000s\u0000 \u0000M\u0000o\u0000n\u0000s\u0000t\u0000e\u0000r\u0000]\u0000(\u0000h\u0000t\u0000t\u0000p\u0000s\u0000:\u0000/\u0000/\u0000w\u0000w\u0000w\u0000.\u0000y\u0000o\u0000u\u0000t\u0000u\u0000b\u0000e\u0000.\u0000c\u0000o\u0000m\u0000/\u0000w\u0000a\u0000t\u0000c\u0000h\u0000?\u0000v\u0000=\u0000B\u0000d\u00001\u0000E\u0000B\u0000S\u0000C\u0000u\u00002\u0000o\u0000s\u0000)\u0000 \u0000>�\u0018�>�B�.\u0000\r\u0000 \u0000\r\u0000 \u0000!\u0000[\u0000C\u0000o\u0000u\u0000r\u0000s\u0000e\u0000 \u0000T\u0000h\u0000u\u0000m\u0000b\u0000n\u0000a\u0000i\u0000l\u0000]\u0000(\u0000/\u0000t\u0000h\u0000u\u0000m\u0000b\u0000.\u0000p\u0000n\u0000g\u0000)\u0000\r\u0000 \u0000",
   "type": "module",
   "main": "index.js",
   "scripts": {
@@ -13,15 +13,37 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "^6.4.6",
+    "@mui/material": "^6.4.6",
+    "@reduxjs/toolkit": "^2.6.0",
+    "axios": "^1.8.1",
     "bcryptjs": "^2.4.3",
-    "body-parser": "^1.20.2",
+    "body-parser": "^1.20.3",
     "concurrently": "^8.2.2",
-    "cookie-parser": "^1.4.6",
-    "dotenv": "^16.4.1",
-    "express": "^4.18.2",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "framer-motion": "^12.4.7",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.1.1",
+    "mongoose": "^8.10.2",
     "multer": "^1.4.5-lts.1",
-    "nodemon": "^3.0.3"
+    "nodemon": "^3.1.9",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-icons": "^5.5.0",
+    "react-player": "^2.16.0",
+    "react-redux": "^9.2.0",
+    "react-router": "^7.2.0",
+    "react-router-dom": "^7.2.0",
+    "react-slick": "^0.30.3",
+    "react-toastify": "^11.0.5",
+    "slick-carousel": "^1.8.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^6.2.0"
   }
 }

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link,useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import {
@@ -9,6 +9,7 @@ import {
 import MovieTabs from "./MovieTabs";
 
 const MovieDetails = () => {
+  const navigate = useNavigate();
   const { id: movieId } = useParams();
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
@@ -68,19 +69,18 @@ const MovieDetails = () => {
               ))}
             </ul>
           </div>
-
           {movie?.streamingLink && (
-            <div className="mb-8">
-              <a
-                href={movie.streamingLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block bg-teal-500 text-white px-6 py-3 rounded font-semibold hover:bg-teal-600 transition duration-300"
-              >
-                Watch Now
-              </a>
-            </div>
-          )}
+  <div className="mb-8">
+    <a
+      href={movie.streamingLink} // Direct link to the streaming URL
+      target="_blank" // Open in a new tab
+      rel="noopener noreferrer"
+      className="bg-teal-500 text-white px-8 py-3 rounded-lg font-bold hover:bg-teal-600 transition duration-300"
+    >
+      Watch Now ▶️
+    </a>
+  </div>
+)}
 
           <MovieTabs
             loadingMovieReview={loadingMovieReview}
