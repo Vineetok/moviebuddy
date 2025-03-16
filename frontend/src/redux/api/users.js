@@ -10,7 +10,22 @@ export const userApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
-
+    addToWishlist: builder.mutation({
+      query: (movieId) => ({
+        url: `${USERS_URL}/wishlist`,
+        method: "POST",
+        body: { movieId },
+      }),
+    }),
+    removeFromWishlist: builder.mutation({
+      query: (movieId) => ({
+        url: `${USERS_URL}/wishlist/${movieId}`,
+        method: "DELETE",
+      }),
+    }),
+    getWishlist: builder.query({
+      query: () => `${USERS_URL}/wishlist`,
+    }),
     register: builder.mutation({
       query: (data) => ({
         url: `${USERS_URL}`,
@@ -48,4 +63,7 @@ export const {
   useLogoutMutation,
   useProfileMutation,
   useGetUsersQuery,
+  useAddToWishlistMutation,
+  useRemoveFromWishlistMutation,
+  useGetWishlistQuery,
 } = userApiSlice;

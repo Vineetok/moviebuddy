@@ -44,6 +44,9 @@ export const moviesApiSlice = apiSlice.injectEndpoints({
         method: "DELETE",
       }),
     }),
+    getMoviesReport: builder.query({
+      query: () => `${MOVIE_URL}/reports`,
+    }),
 
     getSpecificMovie: builder.query({
       query: (id) => `${MOVIE_URL}/specific-movie/${id}`,
@@ -80,8 +83,9 @@ export const {
   useGetSpecificMovieQuery,
   useUploadImageMutation,
   useDeleteMovieMutation,
-  //
+  useGetMovies,
   useGetNewMoviesQuery,
   useGetTopMoviesQuery,
   useGetRandomMoviesQuery,
+  useGetMoviesReportQuery,
 } = moviesApiSlice;

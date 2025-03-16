@@ -1,12 +1,7 @@
-import { useState } from "react";
-import {
-  AiOutlineHome,
-  AiOutlineLogin,
-  AiOutlineUserAdd,
-} from "react-icons/ai";
+import React, { useState } from "react";
+import { AiOutlineHome, AiOutlineLogin, AiOutlineUserAdd } from "react-icons/ai";
 import { MdOutlineLocalMovies } from "react-icons/md";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useLogoutMutation } from "../../redux/api/users";
 import { logout } from "../../redux/features/auth/authSlice";
@@ -37,7 +32,7 @@ const Navigation = () => {
   return (
     <div className="fixed top-4 right-4 z-50 bg-[#0f0f0f] border w-11/12 sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-1/4 px-6 py-4 rounded-lg shadow-lg">
       <section className="flex justify-between items-center">
-        {/* Section 1 */}
+        {/* Section 1: Home & Movies Links */}
         <div className="flex space-x-6">
           <Link
             to="/"
@@ -57,25 +52,19 @@ const Navigation = () => {
             <span className="text-white text-sm">Movies</span>
           </Link>
         </div>
-        {/* Section 2 */}
+
+        {/* Section 2: User Menu */}
         <div className="relative">
           <button
             onClick={toggleDropdown}
             className="text-white focus:outline-none flex items-center"
             aria-label="User Menu"
           >
-            {userInfo ? (
-              <span className="mr-2">{userInfo.username}</span>
-            ) : (
-              <></>
-            )}
-
+            {userInfo ? <span className="mr-2">{userInfo.username}</span> : null}
             {userInfo && (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className={`h-4 w-4 transition-transform ${
-                  dropdownOpen ? "transform rotate-180" : ""
-                }`}
+                className={`h-4 w-4 transition-transform ${dropdownOpen ? "transform rotate-180" : ""}`}
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -115,6 +104,18 @@ const Navigation = () => {
                   Profile
                 </Link>
               </li>
+
+              {/* Only display Wishlist link for non-admin users */}
+              {!userInfo.isAdmin && (
+                <li>
+                  <Link
+                    to="/wishlist"
+                    className="block px-4 py-2 hover:bg-gray-100 transition-colors"
+                  >
+                    My Wishlist
+                  </Link>
+                </li>
+              )}
 
               <li>
                 <button

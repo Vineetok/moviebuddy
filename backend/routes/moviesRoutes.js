@@ -1,4 +1,5 @@
 import express from "express";
+import { getMoviesReport } from "../controllers/movieController.js";
 const router = express.Router();
 
 // Controllers
@@ -31,6 +32,7 @@ router.post("/:id/reviews", authenticate, checkId, movieReview);
 // Admin
 router.post("/create-movie", authenticate, authorizeAdmin, createMovie);
 router.put("/update-movie/:id", authenticate, authorizeAdmin, updateMovie);
+router.get("/reports", authenticate, authorizeAdmin, getMoviesReport);
 router.delete("/delete-movie/:id", authenticate, authorizeAdmin, deleteMovie);
 router.delete("/delete-comment", authenticate, authorizeAdmin, deleteComment);
 export default router;

@@ -117,6 +117,31 @@ const updateCurrentUserProfile = asyncHandler(async (req, res) => {
     throw new Error("User not found");
   }
 });
+const addToWishlist = asyncHandler(async (req, res) => {
+  const { movieId } = req.body;
+  const user = await User.findById(req.user._id);
+  if (user.wishlist.includes(movieId)) {
+    return res.status(400).json({ message: "Movie already in wishlist" });
+  }
+  user.wishlist.push(movieId);
+  await user.save();
+  res.json({ message: "Movie added to wishlist" });
+});
+
+const removeFromWishlist = asyncHandler(async (req, res) => {
+  const { movieId } = req.params;
+  const user = await User.findById(req.user._id);
+  user.wishlist = user.wishlist.filter((id) => id.toString() !== movieId);
+  await user.save();
+  res.json({ message: "Movie removed from wishlist" });
+});
+
+const getWishlist = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id).populate("wishlist");
+  res.json(user.wishlist);
+});
+
+export { addToWishlist, removeFromWishlist, getWishlist };
 
 export {
   createUser,

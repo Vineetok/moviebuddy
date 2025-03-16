@@ -4,6 +4,7 @@ import "./index.css";
 import store from "./redux/store.js";
 import { Provider } from "react-redux";
 import { Route, createRoutesFromElements } from "react-router";
+import Reports from "./pages/Admin/Reports.jsx";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
@@ -28,6 +29,9 @@ import AllMovies from "./pages/Movies/AllMovies.jsx";
 import MovieDetails from "./pages/Movies/MovieDetails.jsx";
 import AllComments from "./pages/Admin/AllComments.jsx";
 import AdminDashboard from "./pages/Admin/Dashboard/AdminDashboard.jsx";
+import Wishlist from "./pages/User/Wishlist.jsx";
+
+
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -43,6 +47,9 @@ const router = createBrowserRouter(
       <Route element={<PrivateRoute />}>
         <Route path="/profile" element={<Profile />} />
       </Route>
+      <Route element={<PrivateRoute />}>
+        <Route path="/wishlist" element={<Wishlist />} />
+      </Route>
 
       {/* Admin Routes */}
       <Route element={<AdminRoute />}>
@@ -52,6 +59,7 @@ const router = createBrowserRouter(
         <Route path="/admin/movies/update/:id" element={<UpdateMovie />} />
         <Route path="/admin/movies/dashboard" element={<AdminDashboard />} />
         <Route path="/admin/movies/comments" element={<AllComments />} />
+        <Route path="/admin/movies/reports" element={<Reports />} />
       </Route>
 
       {/* Catch-all 404 Route */}
