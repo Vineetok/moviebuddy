@@ -13,12 +13,13 @@ const CreateMovie = () => {
   const [movieData, setMovieData] = useState({
     name: "",
     year: 0,
+    releaseDate: "", // New field: release date provided by admin
     detail: "",
     cast: [],
     rating: 0,
     image: null,
     genre: "",
-    streamingLink: "",  // <-- Added streaming link
+    streamingLink: "",
   });
 
   const [selectedImage, setSelectedImage] = useState(null);
@@ -46,7 +47,7 @@ const CreateMovie = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
+    // For genre selection, we update as before
     if (name === "genre") {
       const selectedGenre = genres.find((genre) => genre.name === value);
       setMovieData((prevData) => ({
@@ -62,195 +63,190 @@ const CreateMovie = () => {
   };
 
   const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    setSelectedImage(file);
+    setSelectedImage(e.target.files[0]);
   };
 
   const handleCreateMovie = async () => {
-    try {
-      if (
-        !movieData.name ||
-        !movieData.year ||
-        !movieData.detail ||
-        !movieData.cast ||
-        !selectedImage ||
-        !movieData.streamingLink  // <-- Ensure streaming link is provided
-      ) {
-        toast.error("Please fill all required fields");
+    // Validate required fields including the new releaseDate and cast
+    if (
+      !movieData.name ||
+      !movieData.year ||
+      !movieData.releaseDate ||
+      !movieData.detail ||
+      movieData.cast.length === 0 ||
+      !selectedImage ||
+      !movieData.streamingLink
+    ) {
+      toast.error("Please fill all required fields");
+      return;
+    }
+
+    let uploadedImagePath = null;
+
+    if (selectedImage) {
+      const formData = new FormData();
+      formData.append("image", selectedImage);
+
+      const uploadImageResponse = await uploadImage(formData);
+
+      if (uploadImageResponse.data) {
+        uploadedImagePath = uploadImageResponse.data.image;
+      } else {
+        console.error("Failed to upload image: ", uploadImageErrorDetails);
+        toast.error("Failed to upload image");
         return;
       }
-
-      let uploadedImagePath = null;
-
-      if (selectedImage) {
-        const formData = new FormData();
-        formData.append("image", selectedImage);
-
-        const uploadImageResponse = await uploadImage(formData);
-
-        if (uploadImageResponse.data) {
-          uploadedImagePath = uploadImageResponse.data.image;
-        } else {
-          console.error("Failed to upload image: ", uploadImageErrorDetails);
-          toast.error("Failed to upload image");
-          return;
-        }
-
-        await createMovie({
-          ...movieData,
-          image: uploadedImagePath,
-        });
-
-        navigate("/admin/movies-list");
-
-        setMovieData({
-          name: "",
-          year: 0,
-          detail: "",
-          cast: [],
-          ratings: 0,
-          image: null,
-          genre: "",
-          streamingLink: "",  // <-- Reset streaming link
-        });
-
-        toast.success("Movie Added To Database");
-      }
-    } catch (error) {
-      console.error("Failed to create movie: ", createMovieErrorDetail);
-      toast.error(`Failed to create movie: ${createMovieErrorDetail?.message}`);
     }
+
+    await createMovie({
+      ...movieData,
+      image: uploadedImagePath,
+    });
+
+    navigate("/admin/movies-list");
+    setMovieData({
+      name: "",
+      year: 0,
+      releaseDate: "",
+      detail: "",
+      cast: [],
+      rating: 0,
+      image: null,
+      genre: "",
+      streamingLink: "",
+    });
+    toast.success("Movie Added To Database");
   };
 
   return (
-    <div className="container flex justify-center items-center mt-4">
-      <form>
-        <p className="text-green-200 w-[50rem] text-2xl mb-4">Create Movie</p>
+    <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
+      <div className="w-full max-w-4xl bg-[#1E1E1E] shadow-lg rounded-xl p-8">
+        <h1 className="text-3xl font-bold text-teal-400 text-center mb-6">
+          🎬 Add a New Movie
+        </h1>
 
-        <div className="mb-4">
-          <label className="block">
-            Name:
+        {/* Grid Layout for Basic Info */}
+        <div className="grid grid-cols-2 gap-6">
+          <div>
+            <label className="block text-sm font-semibold mb-1">Movie Name</label>
             <input
               type="text"
               name="name"
               value={movieData.name}
               onChange={handleChange}
-              className="border px-2 py-1 w-full"
+              className="w-full p-2 border border-gray-700 rounded-md bg-gray-800 text-white"
             />
-          </label>
-        </div>
+          </div>
 
-        <div className="mb-4">
-          <label className="block">
-            Year:
+          <div>
+            <label className="block text-sm font-semibold mb-1">Release Year</label>
             <input
               type="number"
               name="year"
               value={movieData.year}
               onChange={handleChange}
-              className="border px-2 py-1 w-full"
+              className="w-full p-2 border border-gray-700 rounded-md bg-gray-800 text-white"
             />
-          </label>
+          </div>
         </div>
 
-        <div className="mb-4">
-          <label className="block">
-            Detail:
-            <textarea
-              name="detail"
-              value={movieData.detail}
-              onChange={handleChange}
-              className="border px-2 py-1 w-full"
-            ></textarea>
-          </label>
-        </div>
-
-        <div className="mb-4">
-          <label className="block">
-            Cast (comma-separated):
+        {/* Additional Grid for Release Date & Genre */}
+        <div className="grid grid-cols-2 gap-6 mt-4">
+          <div>
+            <label className="block text-sm font-semibold mb-1">Release Date</label>
             <input
-              type="text"
-              name="cast"
-              value={movieData.cast.join(", ")}
-              onChange={(e) =>
-                setMovieData({ ...movieData, cast: e.target.value.split(", ") })
-              }
-              className="border px-2 py-1 w-full"
+              type="date"
+              name="releaseDate"
+              value={movieData.releaseDate}
+              onChange={handleChange}
+              className="w-full p-2 border border-gray-700 rounded-md bg-gray-800 text-white"
             />
-          </label>
-        </div>
+          </div>
 
-        <div className="mb-4">
-          <label className="block">
-            Genre:
+          <div>
+            <label className="block text-sm font-semibold mb-1">Genre</label>
             <select
               name="genre"
               value={movieData.genre}
               onChange={handleChange}
-              className="border px-2 py-1 w-full"
+              className="w-full p-2 border border-gray-700 rounded-md bg-gray-800 text-white"
             >
               {isLoadingGenres ? (
-                <option>Loading genres...</option>
+                <option>Loading...</option>
               ) : (
                 genres.map((genre) => (
-                  <option key={genre.id} value={genre.id}>
+                  <option key={genre._id} value={genre._id}>
                     {genre.name}
                   </option>
                 ))
               )}
             </select>
-          </label>
+          </div>
         </div>
 
-        <div className="mb-4">
-          <label className="block">
-            Streaming Link:  {/* <-- Added input field for streaming link */}
-            <input
-              type="text"
-              name="streamingLink"
-              value={movieData.streamingLink}
-              onChange={handleChange}
-              className="border px-2 py-1 w-full"
-              placeholder="Enter streaming link (e.g., YouTube, Netflix, etc.)"
-            />
-          </label>
+        {/* Streaming Link */}
+        <div className="mt-4">
+          <label className="block text-sm font-semibold mb-1">Streaming Link</label>
+          <input
+            type="text"
+            name="streamingLink"
+            value={movieData.streamingLink}
+            onChange={handleChange}
+            placeholder="Enter streaming platform link..."
+            className="w-full p-2 border border-gray-700 rounded-md bg-gray-800 text-white"
+          />
         </div>
 
-        <div className="mb-4">
-          <label
-            style={
-              !selectedImage
-                ? {
-                    border: "1px solid #888",
-                    borderRadius: "5px",
-                    padding: "8px",
-                  }
-                : {
-                    border: "0",
-                    borderRadius: "0",
-                    padding: "0",
-                  }
+        {/* Movie Details */}
+        <div className="mt-4">
+          <label className="block text-sm font-semibold mb-1">Movie Details</label>
+          <textarea
+            name="detail"
+            value={movieData.detail}
+            onChange={handleChange}
+            rows="3"
+            className="w-full p-2 border border-gray-700 rounded-md bg-gray-800 text-white"
+          ></textarea>
+        </div>
+
+        {/* Cast Field */}
+        <div className="mt-4">
+          <label className="block text-sm font-semibold mb-1">Cast (comma-separated)</label>
+          <input
+            type="text"
+            name="cast"
+            value={movieData.cast.join(", ")}
+            onChange={(e) =>
+              setMovieData({
+                ...movieData,
+                cast: e.target.value.split(",").map((c) => c.trim()),
+              })
             }
-          >
-            {!selectedImage && "Upload Image"}
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-              style={{ display: !selectedImage ? "none" : "block" }}
-            />
-          </label>
+            className="w-full p-2 border border-gray-700 rounded-md bg-gray-800 text-white"
+            placeholder="Actor 1, Actor 2, Actor 3"
+          />
         </div>
 
+        {/* Movie Poster Upload */}
+        <div className="mt-4">
+          <label className="block text-sm font-semibold mb-1">Movie Poster</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            className="w-full text-gray-300"
+          />
+        </div>
+
+        {/* Submit Button */}
         <button
-          type="button"
           onClick={handleCreateMovie}
-          className="bg-teal-500 text-white px-4 py-2 rounded"
+          className="w-full mt-6 bg-gradient-to-r from-teal-500 to-lime-400 text-black font-semibold py-2 rounded-lg hover:opacity-90 transition"
           disabled={isCreatingMovie || isUploadingImage}
         >
-          {isCreatingMovie || isUploadingImage ? "Creating..." : "Create Movie"}
+          {isCreatingMovie || isUploadingImage ? "Adding..." : "Add Movie"}
         </button>
-      </form>
+      </div>
     </div>
   );
 };

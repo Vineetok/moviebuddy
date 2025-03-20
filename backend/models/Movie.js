@@ -24,6 +24,7 @@ const movieSchema = new mongoose.Schema(
     name: { type: String, required: true },
     image: { type: String },
     year: { type: Number, required: true },
+    releaseDate: { type: Date, required: true }, 
     genre: { 
       type: mongoose.Schema.Types.ObjectId, 
       ref: "Genre", 

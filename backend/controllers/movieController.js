@@ -4,6 +4,7 @@ import asyncHandler from "../middlewares/asyncHandler.js";
 // Create a new movie
 const createMovie = async (req, res) => {
   try {
+    // The request body should now include releaseDate along with other fields
     const newMovie = new Movie(req.body);
     const savedMovie = await newMovie.save();
     res.status(201).json(savedMovie);
@@ -11,17 +12,18 @@ const createMovie = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+// Get movies report based on the releaseDate field
 const getMoviesReport = asyncHandler(async (req, res) => {
   try {
-    // Use the createdAt field to determine the year and month the movie was added.
     const report = await Movie.aggregate([
       {
         $project: {
           name: 1,
           genre: 1,
-          // Extract year and month from the createdAt field
-          year: { $year: "$createdAt" },
-          month: { $month: "$createdAt" },
+          // Use releaseDate field instead of createdAt
+          year: { $year: "$releaseDate" },
+          month: { $month: "$releaseDate" },
         },
       },
       {
